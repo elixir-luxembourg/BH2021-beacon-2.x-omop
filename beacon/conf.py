@@ -69,14 +69,14 @@ beacon_handovers = [
 #
 # Database connection
 #
-database_url = 'mongo'
-database_port = 27017
-database_user = 'root'
-database_password = 'example'
+database_url = 'localhost'
+database_port = 5432
+database_user = 'user'
+database_password = 'password'
 database_name = 'beacon'
-database_auth_source = 'admin'
-# database_schema = 'public' # comma-separated list of schemas
-# database_app_name = 'beacon-appname' # Useful to track connections
+database_schema = 'public' # comma-separated list of schemas
+database_app_name = 'beacon-appname' # Useful to track connections
+
 
 #
 # Web server configuration

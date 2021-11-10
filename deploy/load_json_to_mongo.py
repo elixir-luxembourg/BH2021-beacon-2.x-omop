@@ -21,5 +21,6 @@ def main():
         client.beacon.get_collection(args.collection).insert_many(data)
         print("DONE!")
 
+
 if __name__ == "__main__":
     main()

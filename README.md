@@ -1,3 +1,7 @@
+# Note: work in progress
+This repository contains the BioHackathon-Europe 2021 attempt to align Beacon with OMOP data model (stored in Postgres database)
+
+
 # Beacon v2.x
 
 [![Testsuite](https://github.com/EGA-archive/beacon-2.x/workflows/Testsuite/badge.svg)](https://github.com/EGA-archive/beacon-2.x/actions)
