@@ -32,6 +32,15 @@ services:
     entrypoint: ['python','-m','beacon']
     # entrypoint: ['/bin/sleep','100000000']
 
+  beacon-db:
+    image: postgres
+    hostname: beacon-db
+    container_name: beacon-db
+    environment:
+      - POSTGRES_DB=beacon
+      - POSTGRES_USER=beacon
+      - POSTGRES_PASSWORD=secretpassword
+
   ###########################################
   # Dummy Permissions server
   ###########################################
