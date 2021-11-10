@@ -1,6 +1,7 @@
 from aiohttp import web
 
 from beacon.db import analyses, biosamples, cohorts, datasets, g_variants, individuals, runs
+from beacon.db.backends import postgres
 from beacon.request.handlers import generic_handler
 from beacon.response import framework, filtering_terms, info
 
@@ -56,6 +57,9 @@ routes = [
     web.get('/api/g_variants/{id}/individuals/', generic_handler(db_fn=g_variants.get_individuals_of_variant)),
     web.get('/api/g_variants/{id}/runs/', generic_handler(db_fn=g_variants.get_runs_of_variant)),
     web.get('/api/g_variants/{id}/analyses/', generic_handler(db_fn=g_variants.get_analyses_of_variant)),
+
+    web.get('/api/diseases/', generic_handler(db_fn=postgres.count_individuals_by_disease)),
+    web.get('/api/individuals/count', generic_handler(db_fn=individuals.count_individuals)),
 
     web.get('/api/individuals/', generic_handler(db_fn=individuals.get_individuals)),
     web.get('/api/individuals/{id}/', generic_handler(db_fn=individuals.get_individual_with_id)),

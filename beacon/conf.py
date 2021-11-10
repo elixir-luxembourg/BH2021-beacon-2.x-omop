@@ -72,10 +72,10 @@ beacon_handovers = [
 #
 database_url = 'localhost'
 database_port = 5432
-database_user = 'user'
-database_password = 'password'
-database_name = 'beacon'
-database_schema = 'public' # comma-separated list of schemas
+database_user = 'maxim'
+database_password = ''
+database_name = 'ohdsi'
+database_schema = 'cdm_syntheav' # comma-separated list of schemas
 database_app_name = 'beacon-appname' # Useful to track connections
 
 
