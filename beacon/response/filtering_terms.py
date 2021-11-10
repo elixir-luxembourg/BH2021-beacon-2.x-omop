@@ -12,6 +12,9 @@ from beacon.utils.stream import json_stream
 
 
 async def handler(request):
+    return {
+        'error': 'not implemented yet'  # TODO:
+    }
     ontology_terms = [
         {
             'id': record['ontology'] + ':' + record['term'],

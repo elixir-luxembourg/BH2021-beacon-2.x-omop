@@ -1,14 +1,20 @@
+import json
+import logging
+
+from beacon.db.backends.postgres import PostgresBackend
 from beacon.db.filters import apply_filters
 from beacon.db.utils import query_id
 from beacon.request.model import RequestParams
-from beacon.db import client
 
-import logging
-import json
+
 LOG = logging.getLogger(__name__)
+client = []  # TODO: Remove
+
 
 def get_datasets(entry_id: str, qparams: RequestParams):
     query = apply_filters({}, qparams.query.filters)
+    return PostgresBackend.get_datasets(query)    
+    # TODO: Remove
     return client.beacon.datasets\
         .find(query)\
         .skip(qparams.query.pagination.skip)\
@@ -53,6 +59,8 @@ def get_individuals_of_dataset(entry_id: str, qparams: RequestParams):
 
 def filter_public_datasets(requested_datasets_ids):
     query = { "dataUseConditions.duoDataUse.modifiers.id" : "DUO:0000004" }
+    return PostgresBackend.get_datasets(query)
+    # TODO: Remove
     return client.beacon.datasets\
         .find(query)
 

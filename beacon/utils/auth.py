@@ -3,7 +3,7 @@ import logging
 from aiohttp import ClientSession, web
 
 from beacon.db.datasets import filter_public_datasets
-from ..conf import permissions_url
+from beacon.conf import permissions_url
 
 LOG = logging.getLogger(__name__)
 

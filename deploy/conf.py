@@ -6,7 +6,7 @@
 beacon_id = 'org.ega-archive.beacon'  # ID of the Beacon
 beacon_name = 'Beacon Test Instance'  # Name of the Beacon service
 api_version = 'v2.0.0-draft.4'  # Version of the Beacon implementation
-uri = 'https://beacon-giab-test.ega-archive.org'
+uri = 'https://omop-beacon.example.org'
 beacon_granularity = "record"
 
 #

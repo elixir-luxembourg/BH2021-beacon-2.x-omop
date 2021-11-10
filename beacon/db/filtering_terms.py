@@ -5,6 +5,9 @@ from beacon.request.model import RequestParams
 
 
 def get_filtering_terms(entry_id: str, qparams: RequestParams):
+    return {
+        'error': 'not_implemented'
+    }  # TODO: fill
     query = apply_filters({}, qparams.query.filters)
     return client.beacon.filtering_terms\
         .find(query)\
@@ -13,6 +16,9 @@ def get_filtering_terms(entry_id: str, qparams: RequestParams):
 
 
 def get_filtering_term_with_id(entry_id: str, qparams: RequestParams):
+    return {
+        'error': 'not_implemented'
+    }  # TODO: fill
     query = apply_filters({}, qparams.query.filters)
     query = query_id(query, entry_id)
     return client.beacon.filtering_terms\

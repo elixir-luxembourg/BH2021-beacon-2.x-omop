@@ -8,6 +8,7 @@ pyyaml~=5.4.1
 cryptography~=35.0.0
 jinja2~=3.0.2
 #aiohttp_csrf
+pymongo~=3.12.0
 aiohttp-jinja2~=1.5
 aiohttp-session~=2.9.0
 dataclasses-json~=0.5.6
