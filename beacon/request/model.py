@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from multidict import MultiDictProxy
 from strenum import StrEnum
 from typing import List, Union
 from dataclasses_json import dataclass_json, LetterCase
@@ -79,6 +80,11 @@ class RequestQuery:
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
-class RequestParams:
+class OldRequestParams:
     meta: RequestMeta
     query: RequestQuery
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
+class RequestParams:
+    query: MultiDictProxy

@@ -30,7 +30,18 @@ services:
     #   - pub
     working_dir: '/beacon'
     entrypoint: ['python','-m','beacon']
+    depends_on:
+      - beacon-db
     # entrypoint: ['/bin/sleep','100000000']
+
+  beacon-db:
+    image: postgres
+    hostname: beacon-db
+    container_name: beacon-db
+    environment:
+      - POSTGRES_DB=beacon
+      - POSTGRES_USER=beacon
+      - POSTGRES_PASSWORD=secretpassword
 
   ###########################################
   # Dummy Permissions server
@@ -58,41 +69,41 @@ services:
   # Keycloak is so slow to boot that the DB goes faster
   # and we don't need a delay in-between. We can rely on the depends_on only.
 
-  idp:
-    image: jboss/keycloak
-    hostname: idp
-    container_name: idp
-    environment:
-      # - KEYCLOAK_FRONTEND_URL=http://idp:8080/auth
-      # - KEYCLOAK_LOGLEVEL=DEBUG
-      # - ROOT_LOGLEVEL=DEBUG
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=secret
-      - DB_USER=admin
-      - DB_PASSWORD=secret
-      - DB_VENDOR=postgres
-      - DB_ADDR=idp-db
-      - DB_PORT=5432
-      - DB_DATABASE=keycloak
-      #- DB_SCHEMA=public
-      - KEYCLOAK_IMPORT=/tmp/beacon-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled
-    volumes:
-      - ./beacon-realm.json:/tmp/beacon-realm.json
-    ports:
-      - "8080:8080"
-    # networks:
-    #   - pub
-    #   - idp-priv
-    depends_on:
-      - idp-db
+  # idp:
+  #   image: jboss/keycloak
+  #   hostname: idp
+  #   container_name: idp
+  #   environment:
+  #     # - KEYCLOAK_FRONTEND_URL=http://idp:8080/auth
+  #     # - KEYCLOAK_LOGLEVEL=DEBUG
+  #     # - ROOT_LOGLEVEL=DEBUG
+  #     - KEYCLOAK_USER=admin
+  #     - KEYCLOAK_PASSWORD=secret
+  #     - DB_USER=admin
+  #     - DB_PASSWORD=secret
+  #     - DB_VENDOR=postgres
+  #     - DB_ADDR=idp-db
+  #     - DB_PORT=5432
+  #     - DB_DATABASE=keycloak
+  #     #- DB_SCHEMA=public
+  #     - KEYCLOAK_IMPORT=/tmp/beacon-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled
+  #   volumes:
+  #     - ./beacon-realm.json:/tmp/beacon-realm.json
+  #   ports:
+  #     - "8080:8080"
+  #   # networks:
+  #   #   - pub
+  #   #   - idp-priv
+  #   depends_on:
+  #     - idp-db
 
-  idp-db:
-    image: postgres
-    hostname: idp-db
-    container_name: idp-db
-    environment:
-      - POSTGRES_DB=keycloak
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=secret
+  # idp-db:
+  #   image: postgres
+  #   hostname: idp-db
+  #   container_name: idp-db
+  #   environment:
+  #     - POSTGRES_DB=keycloak
+  #     - POSTGRES_USER=admin
+  #     - POSTGRES_PASSWORD=secret
     # networks:
     #   - idp-priv

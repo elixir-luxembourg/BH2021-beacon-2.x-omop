@@ -6,7 +6,7 @@
 SHELL := /bin/bash
 IMG ?= egarchive/beacon
 TARGET ?= 2.0
-CONTAINER ?= beacon
+CONTAINER ?= omop-beacon
 
 .PHONY: build run exec down server
 
