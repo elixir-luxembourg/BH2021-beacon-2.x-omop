@@ -126,6 +126,15 @@ pool = DBConnection()
 async def close():
     await pool.close()
 
+# Get a dummy value from the database 
+@pool.coroutine_execute
+async def get_dummy_value(connection):
+    LOG.info('Retrieving the dummy value')
+
+    query = f"""SELECT 1 as test;"""
+    LOG.debug("QUERY: %s", query)
+    return await connection.fetchval(query)
+
 # Get the latest modification data of a DB dataset 
 @pool.coroutine_execute
 async def get_last_modified_date(connection):
@@ -457,6 +466,9 @@ def count_variants_by_biosample(qparams_db, datasets, authenticated):
 def count_variants_by_individual(qparams_db, datasets, authenticated):
     return _count_variants(qparams_db, datasets, authenticated, individual_stable_id=qparams_db.targetIdReq)
 
+def count_individuals_by_disease(qparams_db):
+    return _count_condition_occurrences(qparams_db)
+
 def count_individuals_by_variant(qparams_db, datasets, authenticated):
     return _count_individuals(qparams_db, datasets, authenticated, variant_id=qparams_db.targetIdReq)
 
@@ -511,6 +523,21 @@ async def _count_variants(connection,
                                      int(variant_id) if variant_id else None,  # _gvariant_id
                                      qparams_db.filters,  # requestedSchemas
                                      column=0)
+
+@pool.coroutine_execute
+async def _count_condition_occurrences(connection,
+                             qparams_db,
+                             datasets=None,
+                             authenticated=None,
+                             variant_id=None,
+                             biosample_stable_id=None,
+                             individual_stable_id=None):
+    LOG.info('Retrieving condition occurrences.')
+
+    query = f"SELECT COUNT(DISTINCT person_id) FROM {conf.database_schema}.condition_occurrence;"
+    LOG.debug("QUERY: %s", query)
+    statement = await connection.prepare(query)
+    return await statement.fetchval()
 
 @pool.coroutine_execute
 async def _count_individuals(connection,
