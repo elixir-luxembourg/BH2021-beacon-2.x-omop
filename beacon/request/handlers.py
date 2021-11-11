@@ -5,7 +5,8 @@ from beacon.request.model import RequestParams
 from bson import json_util
 
 from beacon.request import get_parameters
-from beacon.response.info_response_schema import build_beacon_resultset_response
+from beacon.response.info_response_schema import build_beacon_resultset_response, build_beacon_count_response
+
 import logging
 
 LOG = logging.getLogger(__name__)
@@ -39,22 +40,14 @@ def dummy_pg_handler(log_name, db_fn):
     async def wrapper(request):
         LOG.info('Running a request for %s', log_name)
 
-        body = await request.json()  # TODO: for GET use request.query
+        body = await request.json()  # TODO: use get_parameters
         qparams = RequestParams(query=body['query'])
 
         # TODO: Pick access_token
-        # TODO: Filter out datasets
 
-        # TODO: Get values from the database
-        response = await db_fn(qparams)
-        # response_total_results = count_results_func(qparams_db, datasets, authenticated)
-        
-        # rows = [row async for row in response]
-        # num_total_results = await response_total_results
-
-        # build_beacon_response knows how to loop through it
-        # response_converted = build_beacon_response(proxy, rows, num_total_results, qparams_db, by_entity_type, non_accessible_datasets, build_response_func)
+        num_total_results = await db_fn(qparams)
+        response_converted = build_beacon_count_response(num_total_results, body)
 
         LOG.info('Formatting the response for %s', log_name)
-        return web.json_response(response)
+        return web.json_response(response_converted)
     return wrapper

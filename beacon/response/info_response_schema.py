@@ -36,6 +36,40 @@ def build_beacon_resultset_response(data,
     return beacon_response
 
 
+def build_beacon_count_response(num_total_results,
+                                qparams: dict):
+    """"
+    Transform data into the Beacon response format for the count granularity.
+    """
+
+    meta = {
+        'beaconId': conf.beacon_id,
+        'apiVersion': conf.api_version,
+        'returnedGranularity': conf.beacon_granularity,
+        'receivedRequestSummary': {
+            "apiVersion": qparams['meta']['apiVersion'],
+            "requestedSchemas": qparams['meta']['requestedSchemas'],
+            "requestParameters": qparams['query']['requestParameters'],
+            "filters": qparams['query']['filters'],
+            "includeResultsetResponses": qparams['query']['includeResultsetResponses'],
+            "pagination": {
+                "skip": qparams['query']['pagination']['skip'],
+                "limit": qparams['query']['pagination']['limit']
+            },
+            "requestedGranularity": qparams['query']['requestedGranularity']
+        },
+        'returnedSchemas': ['TODO']  # TODO
+    }
+
+    beacon_response = {
+        "$schema": "../beaconCountResponse.json",
+        'meta': meta,
+        'responseSummary': build_response_summary(num_total_results > 0, num_total_results),
+        # TODO: 'extendedInfo': build_extended_info(),
+    }
+    return beacon_response
+
+
 def build_beacon_info_response(data, qparams, func_response_type, authorized_datasets=None):
     """"Fills the `results` part with the format for BeaconInfo"""
 
