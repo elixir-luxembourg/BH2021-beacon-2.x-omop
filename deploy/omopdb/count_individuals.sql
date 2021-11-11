@@ -71,3 +71,4 @@ $$;
 -- * Accept multiple disease codes.
 -- * age of onset: for the first time in someones history. => solved with era
 -- * write out doc which describes how beacon request is translated into OMOP query. e.g. diseases from era
+-- * Transform OMOP to individuals model
