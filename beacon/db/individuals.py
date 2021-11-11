@@ -2,16 +2,6 @@ from beacon.db import client
 from beacon.db.filters import apply_filters
 from beacon.db.utils import query_id
 from beacon.request.model import RequestParams
-from beacon.db.backends.postgres import count_individuals_by_disease
-import logging
-
-LOG = logging.getLogger(__name__)
-
-
-def count_individuals(entry_id: str, qparams: RequestParams):
-    LOG.info('Lets count these individuals')
-    spam = count_individuals_by_disease(qparams)
-    return spam
 
 
 def get_individuals(entry_id: str, qparams: RequestParams):
