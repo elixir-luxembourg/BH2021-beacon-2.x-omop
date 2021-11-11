@@ -1,19 +1,24 @@
 /*
- Examples
+ Examples for count_individuals_by_event
  */
+
 -- Condition: Heart disease. Has four descendants at various levels, and concept itself also occurs.
 select * from public.count_individuals_by_event(
     'SNOMED:56265001'
 ); -- 34
 select * from public.count_individuals_by_event(
     'SNOMED:56265001',
-    24,
-    42
+    _min_age_of_onset := 24,
+    _max_age_of_onset := 42
 ); -- 17
 select * from public.count_individuals_by_event(
     'SNOMED:56265001',
     _include_descendants := TRUE
 ); -- 504
+
+select * from public.count_individuals_by_event(
+    _event_codes := ARRAY['SNOMED:56265001', 'SNOMED:410429000', 'SNOMED:53741008', 'SNOMED:230690007', 'SNOMED:22298006']
+); -- 504  !== 577
 
 -- Condition: Non-small cell lung cancer.
 select public.count_individuals_by_event(

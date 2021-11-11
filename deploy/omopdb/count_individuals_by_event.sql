@@ -2,12 +2,12 @@ DROP FUNCTION IF EXISTS public.count_individuals_by_event;
 /*
  Prerequisites: clinical_events view in public schema.
  Based on functions in https://github.com/EGA-archive/beacon-2.x/blob/master/deploy/db/schema.sql
- TODO: multiple event codes
  TODO: descendants
  TODO: age of onset at first occurrence (ordinal=1)
  */
 CREATE FUNCTION public.count_individuals_by_event(
-    _event_code text, -- '<ontology>:<code>'
+    _event_code text default NULL, -- '<ontology>:<code>'
+    _event_codes text [] default NULL, -- '<ontology>:<code>'
     _min_age_of_onset integer default NULL,
     _max_age_of_onset integer default NULL,
     _include_descendants bool default NULL,  -- TODO
@@ -31,16 +31,15 @@ BEGIN
     _query = 'SELECT COUNT(DISTINCT person_id)
     FROM public.clinical_events';
 
-    -- Require disease code
-    IF _event_code IS NULL THEN
-        RETURN QUERY EXECUTE NULL;
+    IF _event_code IS NOT NULL THEN
+        _event_codes := ARRAY [_event_code];
     END IF;
 
-    -- #1=_event_code, #2=_min_age_of_onset, #3=_max_age_of_onset
+    -- #1=_event_codes, #2=_min_age_of_onset, #3=_max_age_of_onset
     -- #4=_include_descendants, #5=_gender_concept_id, #6=_min_value, #7=_max_value,
     -- #8=_unit_code, #9=_value_code
     _where_clause = '
-    WHERE event_code = $1';
+    WHERE event_code = ANY($1)';
 
     IF _min_age_of_onset IS NOT NULL THEN
         _where_clause =  _where_clause || '
@@ -83,7 +82,7 @@ BEGIN
     RAISE NOTICE '_query: %', _query;
 
     RETURN QUERY EXECUTE _query
-        USING _event_code, _min_age_of_onset, _max_age_of_onset, _include_descendants,
+        USING _event_codes, _min_age_of_onset, _max_age_of_onset, _include_descendants,
         _gender_code, _min_value, _max_value, _unit_code, _value_code;
 END
 $$;
