@@ -1,6 +1,10 @@
 DROP FUNCTION IF EXISTS public.count_individuals_by_event;
 /*
- Prerequisit: clinical_events view in public schema.
+ Prerequisites: clinical_events view in public schema.
+ Based on functions in https://github.com/EGA-archive/beacon-2.x/blob/master/deploy/db/schema.sql
+ TODO: multiple event codes
+ TODO: descendants
+ TODO: age of onset at first occurrence (ordinal=1)
  */
 CREATE FUNCTION public.count_individuals_by_event(
     _event_code text, -- '<ontology>:<code>'

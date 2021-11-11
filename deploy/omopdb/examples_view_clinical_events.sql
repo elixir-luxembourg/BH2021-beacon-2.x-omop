@@ -1,6 +1,6 @@
 select *
 from public.clinical_events
-where domain_name = 'Measurement'
+-- where domain_name = 'Measurement'
 ORDER BY random();
 
 select *
