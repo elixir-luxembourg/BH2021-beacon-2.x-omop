@@ -30,6 +30,8 @@ services:
     #   - pub
     working_dir: '/beacon'
     entrypoint: ['python','-m','beacon']
+    depends_on:
+      - beacon-db
     # entrypoint: ['/bin/sleep','100000000']
 
   beacon-db:

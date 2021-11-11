@@ -128,8 +128,9 @@ async def close():
 
 # Get a dummy value from the database 
 @pool.coroutine_execute
-async def get_dummy_value(connection):
+async def get_dummy_value(connection, qparams):
     LOG.info('Retrieving the dummy value')
+    LOG.info(str(qparams))
 
     query = f"""SELECT 1 as test;"""
     LOG.debug("QUERY: %s", query)

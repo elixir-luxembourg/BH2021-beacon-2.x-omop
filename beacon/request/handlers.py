@@ -38,6 +38,9 @@ def dummy_pg_handler(log_name, db_fn):
     async def wrapper(request):
         LOG.info('Running a request for %s', log_name)
 
+        LOG.info(str(request))
+        LOG.info(str(dir(request)))
+
         qparams = {}
         # qparams = get_qparams_from_request(request)  # TODO
         # LOG.debug('requested datasets:  %s', qparams.datasetIds)
@@ -46,7 +49,7 @@ def dummy_pg_handler(log_name, db_fn):
         # TODO: Filter out datasets
 
         # TODO: Get values from the database
-        response = db_fn(qparams)
+        response = await db_fn(qparams)
         # response_total_results = count_results_func(qparams_db, datasets, authenticated)
         
         # rows = [row async for row in response]
@@ -56,5 +59,5 @@ def dummy_pg_handler(log_name, db_fn):
         # response_converted = build_beacon_response(proxy, rows, num_total_results, qparams_db, by_entity_type, non_accessible_datasets, build_response_func)
 
         LOG.info('Formatting the response for %s', log_name)
-        return await web.Response(body=str(response))
+        return web.Response(body=str(response))
     return wrapper

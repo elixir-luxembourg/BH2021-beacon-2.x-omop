@@ -61,8 +61,8 @@ routes = [
     # web.get('/api/g_variants/{id}/runs/', generic_handler(db_fn=g_variants.get_runs_of_variant)),
     # web.get('/api/g_variants/{id}/analyses/', generic_handler(db_fn=g_variants.get_analyses_of_variant)),
 
-    web.get('/api/individuals/', dummy_pg_handler('GET /api/individuals', db_fn=individuals.get_individuals)),
-    web.get('/api/diseases/', dummy_pg_handler('/api/diseases/', db_fn=count_individuals_by_disease)),
+    # web.get('/api/individuals/', dummy_pg_handler(log_name='GET /api/individuals', db_fn=individuals.get_individuals)),
+    web.get('/api/diseases/', dummy_pg_handler(log_name='/api/diseases/', db_fn=count_individuals_by_disease)),
     # web.get('/api/individuals/{id}/', generic_handler(db_fn=individuals.get_individual_with_id)),
     # web.get('/api/individuals/{id}/g_variants/', generic_handler(db_fn=individuals.get_variants_of_individual)),
     # web.get('/api/individuals/{id}/biosamples/', generic_handler(db_fn=individuals.get_biosamples_of_individual)),
@@ -114,7 +114,7 @@ routes = [
     # web.post('/api/g_variants/{id}/runs/', generic_handler(db_fn=g_variants.get_runs_of_variant)),
     # web.post('/api/g_variants/{id}/analyses/', generic_handler(db_fn=g_variants.get_analyses_of_variant)),
 
-    web.post('/api/individuals/', dummy_pg_handler(db_fn=individuals.get_individuals)),
+    # web.post('/api/individuals/', dummy_pg_handler(log_name='post /api/individuals', db_fn=individuals.get_individuals)),
     # web.post('/api/individuals/{id}/', generic_handler(db_fn=individuals.get_individual_with_id)),
     # web.post('/api/individuals/{id}/g_variants/', generic_handler(db_fn=individuals.get_variants_of_individual)),
     # web.post('/api/individuals/{id}/biosamples/', generic_handler(db_fn=individuals.get_biosamples_of_individual)),
