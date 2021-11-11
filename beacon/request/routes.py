@@ -114,6 +114,7 @@ routes = [
     # web.post('/api/g_variants/{id}/runs/', generic_handler(db_fn=g_variants.get_runs_of_variant)),
     # web.post('/api/g_variants/{id}/analyses/', generic_handler(db_fn=g_variants.get_analyses_of_variant)),
 
+    web.post('/api/diseases/', dummy_pg_handler(log_name='/api/diseases/', db_fn=count_individuals_by_disease)),
     # web.post('/api/individuals/', dummy_pg_handler(log_name='post /api/individuals', db_fn=individuals.get_individuals)),
     # web.post('/api/individuals/{id}/', generic_handler(db_fn=individuals.get_individual_with_id)),
     # web.post('/api/individuals/{id}/g_variants/', generic_handler(db_fn=individuals.get_variants_of_individual)),

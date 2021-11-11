@@ -526,19 +526,32 @@ async def _count_variants(connection,
                                      column=0)
 
 @pool.coroutine_execute
-async def _count_condition_occurrences(connection,
-                             qparams_db,
-                             datasets=None,
-                             authenticated=None,
-                             variant_id=None,
-                             biosample_stable_id=None,
-                             individual_stable_id=None):
+async def _count_condition_occurrences(connection, qparams_db):
+    # TODO: rename, this function counts individuals based on event
     LOG.info('Retrieving condition occurrences.')
+    LOG.info(qparams_db)
+    request_params = qparams_db.query['requestParameters']
 
-    query = f"SELECT COUNT(DISTINCT person_id) FROM {conf.database_schema}.condition_occurrence;"
-    LOG.debug("QUERY: %s", query)
+    diseases = [x['id'] for x in request_params['individual']['diseases']]
+    age_min = request_params['individual']['ageOfOnset']['min']
+    age_max = request_params['individual']['ageOfOnset']['max']
+    gender_code = request_params['individual']['sex']
+    include_descendants = False  # TODO Not supported by request and not by count individuals function
+
+    # filters = qparams_db.query['filters']  # TODO
+
+    # -- #1=_event_code, #2=_event_codes, #3=_min_age_of_onset, #4=_max_age_of_onset
+    # -- #5=_include_descendants, #6=_gender_concept_id,
+    # -- #7=_min_value, #8=_max_value, #9=_unit_code, #10=_value_code
+    query = f"SELECT {conf.database_schema}.count_individuals_by_event($1, $2, $3, $4, $5, $6);"
+
     statement = await connection.prepare(query)
-    return await statement.fetchval()
+    return await statement.fetchval(None,
+                                    diseases,
+                                    age_min,
+                                    age_max,
+                                    include_descendants,
+                                    gender_code)
 
 @pool.coroutine_execute
 async def _count_individuals(connection,

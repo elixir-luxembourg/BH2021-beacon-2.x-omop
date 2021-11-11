@@ -39,7 +39,8 @@ def dummy_pg_handler(log_name, db_fn):
     async def wrapper(request):
         LOG.info('Running a request for %s', log_name)
 
-        qparams = RequestParams(query=request.query)
+        body = await request.json()  # TODO: for GET use request.query
+        qparams = RequestParams(query=body['query'])
 
         # TODO: Pick access_token
         # TODO: Filter out datasets
