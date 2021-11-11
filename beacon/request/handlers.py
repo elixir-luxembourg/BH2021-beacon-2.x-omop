@@ -55,5 +55,5 @@ def dummy_pg_handler(log_name, db_fn):
         # response_converted = build_beacon_response(proxy, rows, num_total_results, qparams_db, by_entity_type, non_accessible_datasets, build_response_func)
 
         LOG.info('Formatting the response for %s', log_name)
-        return web.Response(body=str(response))
+        return web.json_response(response)
     return wrapper

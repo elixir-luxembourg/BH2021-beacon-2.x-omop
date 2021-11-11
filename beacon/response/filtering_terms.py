@@ -12,19 +12,12 @@ from beacon.utils.stream import json_stream
 
 
 async def handler(request):
-    return {
-        'error': 'not implemented yet'  # TODO:
-    }
-    ontology_terms = [
-        {
-            'id': record['ontology'] + ':' + record['term'],
-            'label': record['label']
-        }
-        async for record in get_filtering_terms()
-    ]
+
+
+    ontology_terms = await get_filtering_terms()
     response = {
         'beaconId': conf.beacon_id,
         'apiVersion': conf.api_version,
         'filteringTerms': ontology_terms,
     }
-    return await json_stream(request, response)
+    return response

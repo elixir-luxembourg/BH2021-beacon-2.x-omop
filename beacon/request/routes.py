@@ -16,7 +16,7 @@ routes = [
 
     web.get('/api', info.handler),
     web.get('/api/info', info.handler),
-    web.get('/api/filtering_terms', filtering_terms.handler),
+    web.get('/api/filtering_terms', dummy_pg_handler(log_name='filtering terms', db_fn=filtering_terms.handler)),
 
     web.get('/api/configuration', framework.configuration),
     web.get('/api/entry_types', framework.entry_types),
