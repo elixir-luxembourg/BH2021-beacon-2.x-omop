@@ -109,11 +109,14 @@ SELECT
     unit.vocabulary_id || ':' || unit.concept_code AS unit_code,
     unit.concept_name AS unit_label,
     value.vocabulary_id || ':' || value.concept_code AS value_code,
-    value.concept_name AS value_label
+    value.concept_name AS value_label,
+    row_number() OVER (PARTITION BY person.person_id, event.concept_id ORDER BY start_date) AS ordinal
 FROM clinical_events
     JOIN @cdm.person AS person ON person.person_id = clinical_events.person_id
     JOIN @vocab.concept AS event ON event.concept_id = event_concept_id
     LEFT JOIN @vocab.concept AS unit ON unit.concept_id = unit_concept_id
     LEFT JOIN @vocab.concept AS value ON value.concept_id = value_as_concept_id
     JOIN @vocab.concept AS gender ON gender.concept_id = gender_concept_id
+where person.person_id = 4666
+order by domain_name, event_code
 ;

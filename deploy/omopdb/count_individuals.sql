@@ -68,7 +68,7 @@ $$;
 -- IDEAs:
 -- * ~Build query in sqlalchemy (orm)~
 -- * Make a generic count_individuals, independent of domain
--- * Accept multiple disease codes.
+-- * Accept multiple disease codes. e.g. with comma separated list (abc:123,def:456,...)
 -- * age of onset: for the first time in someones history. => solved with era
 -- * write out doc which describes how beacon request is translated into OMOP query. e.g. diseases from era
 -- * Transform OMOP to individuals model
