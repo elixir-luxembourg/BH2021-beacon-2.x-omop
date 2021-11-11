@@ -1,6 +1,10 @@
 /**
   Union of all clinical events from the clinical OMOP domains condition, drug, procedure, measurement,
   observation, device and specimen.
+  Instruction:
+  1. Replace @cdm with your OMOP CDM schema
+  2. Replace @vocab with your OMOP Vocabulary schema (often the same as the OMOP CDM schema)
+  3. Create the View.
  */
 CREATE OR REPLACE VIEW public.clinical_events AS
 with clinical_events AS (
@@ -117,6 +121,4 @@ FROM clinical_events
     LEFT JOIN @vocab.concept AS unit ON unit.concept_id = unit_concept_id
     LEFT JOIN @vocab.concept AS value ON value.concept_id = value_as_concept_id
     JOIN @vocab.concept AS gender ON gender.concept_id = gender_concept_id
-where person.person_id = 4666
-order by domain_name, event_code
 ;
