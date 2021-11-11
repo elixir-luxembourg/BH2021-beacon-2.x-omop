@@ -467,8 +467,8 @@ def count_variants_by_biosample(qparams_db, datasets, authenticated):
 def count_variants_by_individual(qparams_db, datasets, authenticated):
     return _count_variants(qparams_db, datasets, authenticated, individual_stable_id=qparams_db.targetIdReq)
 
-def count_individuals_by_disease(qparams_db):
-    return _count_condition_occurrences(qparams_db)
+def count_individuals(qparams_db):
+    return _count_individuals(qparams_db)
 
 def count_individuals_by_variant(qparams_db, datasets, authenticated):
     return _count_individuals(qparams_db, datasets, authenticated, variant_id=qparams_db.targetIdReq)
@@ -526,7 +526,7 @@ async def _count_variants(connection,
                                      column=0)
 
 @pool.coroutine_execute
-async def _count_condition_occurrences(connection, qparams_db):
+async def _count_individuals(connection, qparams_db):
     # TODO: rename, this function counts individuals based on event
     LOG.info('Retrieving condition occurrences.')
     LOG.info(qparams_db)
@@ -540,56 +540,55 @@ async def _count_condition_occurrences(connection, qparams_db):
 
     # filters = qparams_db.query['filters']  # TODO
 
-    # -- #1=_event_code, #2=_event_codes, #3=_min_age_of_onset, #4=_max_age_of_onset
-    # -- #5=_include_descendants, #6=_gender_concept_id,
-    # -- #7=_min_value, #8=_max_value, #9=_unit_code, #10=_value_code
-    query = f"SELECT {conf.database_schema}.count_individuals_by_event($1, $2, $3, $4, $5, $6);"
+    # -- #1=_event_codes, #2=_min_age_of_onset, #3=_max_age_of_onset
+    # -- #4=_include_descendants, #5=_gender_concept_id,
+    # -- #6=_min_value, #7=_max_value, #8=_unit_code, #9=_value_code
+    query = f"SELECT {conf.database_schema}.count_individuals_by_event($1, $2, $3, $4, $5);"
 
     statement = await connection.prepare(query)
-    return await statement.fetchval(None,
-                                    diseases,
+    return await statement.fetchval(diseases,
                                     age_min,
                                     age_max,
                                     include_descendants,
                                     gender_code)
 
-@pool.coroutine_execute
-async def _count_individuals(connection,
-                             qparams_db,
-                             datasets,
-                             authenticated,
-                             variant_id=None,
-                             biosample_stable_id=None,
-                             individual_stable_id=None):
-    """
-    Contacts the DB to fetch the info.
-    Returns a pd.DataFrame with the response.
-    """
-    LOG.info('Retrieving viral individuals count')
-
-    # connection.add_log_listener(simple_listener)
-    dollars = ", ".join([f"${i}" for i in range(1, 18)])  # 1..16
-    query = f"SELECT * FROM {conf.database_schema}.count_individuals({dollars});"
-    LOG.debug("QUERY: %s", query)
-    statement = await connection.prepare(query)
-    return await statement.fetchval(qparams_db.variantType,  # _variant_type text,
-                                     qparams_db.start[0] if len(qparams_db.start) == 1 else None,  # _start integer,
-                                     qparams_db.start[0] if len(qparams_db.start) > 1 else None,  # _start_min integer,
-                                     qparams_db.start[1] if len(qparams_db.start) > 1 else None,  # _start_max integer,
-                                     qparams_db.end[0] if len(qparams_db.end) == 1 else None,  # _end integer,
-                                     qparams_db.end[0] if len(qparams_db.end) > 1 else None,  # _end_min integer,
-                                     qparams_db.end[1] if len(qparams_db.end) > 1 else None,  # _end_max integer,
-                                     qparams_db.referenceName, # reference_name
-                                     qparams_db.referenceBases,
-                                     qparams_db.alternateBases,
-                                     qparams_db.assemblyId.lower() if qparams_db.assemblyId else None, # assembly_id
-                                     datasets, # dataset_stable_ids
-                                     authenticated, #is_authenticated
-                                     biosample_stable_id,
-                                     individual_stable_id, # individual_stable_id
-                                     int(variant_id) if variant_id else None,
-                                     qparams_db.filters,  # requestedSchemas
-                                     column=0)
+# @pool.coroutine_execute
+# async def _count_individuals(connection,
+#                              qparams_db,
+#                              datasets,
+#                              authenticated,
+#                              variant_id=None,
+#                              biosample_stable_id=None,
+#                              individual_stable_id=None):
+#     """
+#     Contacts the DB to fetch the info.
+#     Returns a pd.DataFrame with the response.
+#     """
+#     LOG.info('Retrieving viral individuals count')
+#
+#     # connection.add_log_listener(simple_listener)
+#     dollars = ", ".join([f"${i}" for i in range(1, 18)])  # 1..16
+#     query = f"SELECT * FROM {conf.database_schema}.count_individuals({dollars});"
+#     LOG.debug("QUERY: %s", query)
+#     statement = await connection.prepare(query)
+#     return await statement.fetchval(qparams_db.variantType,  # _variant_type text,
+#                                      qparams_db.start[0] if len(qparams_db.start) == 1 else None,  # _start integer,
+#                                      qparams_db.start[0] if len(qparams_db.start) > 1 else None,  # _start_min integer,
+#                                      qparams_db.start[1] if len(qparams_db.start) > 1 else None,  # _start_max integer,
+#                                      qparams_db.end[0] if len(qparams_db.end) == 1 else None,  # _end integer,
+#                                      qparams_db.end[0] if len(qparams_db.end) > 1 else None,  # _end_min integer,
+#                                      qparams_db.end[1] if len(qparams_db.end) > 1 else None,  # _end_max integer,
+#                                      qparams_db.referenceName, # reference_name
+#                                      qparams_db.referenceBases,
+#                                      qparams_db.alternateBases,
+#                                      qparams_db.assemblyId.lower() if qparams_db.assemblyId else None, # assembly_id
+#                                      datasets, # dataset_stable_ids
+#                                      authenticated, #is_authenticated
+#                                      biosample_stable_id,
+#                                      individual_stable_id, # individual_stable_id
+#                                      int(variant_id) if variant_id else None,
+#                                      qparams_db.filters,  # requestedSchemas
+#                                      column=0)
 
 @pool.coroutine_execute
 async def _count_biosamples(connection,
