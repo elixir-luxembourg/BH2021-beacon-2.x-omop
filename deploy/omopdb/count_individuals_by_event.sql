@@ -6,8 +6,7 @@ DROP FUNCTION IF EXISTS public.count_individuals_by_event;
  TODO: age of onset at first occurrence (ordinal=1)
  */
 CREATE FUNCTION public.count_individuals_by_event(
-    _event_code text default NULL, -- '<ontology>:<code>'
-    _event_codes text [] default NULL, -- '<ontology>:<code>'
+    _event_codes text [] default NULL, -- ARRAY['<ontology>:<code>', ... ]
     _min_age_of_onset integer default NULL,
     _max_age_of_onset integer default NULL,
     _include_descendants bool default NULL,  -- TODO
@@ -20,26 +19,24 @@ CREATE FUNCTION public.count_individuals_by_event(
     RETURNS TABLE(_num_total_results bigint)
     LANGUAGE plpgsql
 AS $$
--- _event_code is required.
 -- If _include_descendants is missing, it is treated as FALSE
 DECLARE
     _query text;
     _where_clause text;
 BEGIN
-    -- TODO: only add joins if needed.
-    -- Note: every concept has itself as descendant with distance 0.
     _query = 'SELECT COUNT(DISTINCT person_id)
     FROM public.clinical_events';
-
-    IF _event_code IS NOT NULL THEN
-        _event_codes := ARRAY [_event_code];
-    END IF;
 
     -- #1=_event_codes, #2=_min_age_of_onset, #3=_max_age_of_onset
     -- #4=_include_descendants, #5=_gender_concept_id, #6=_min_value, #7=_max_value,
     -- #8=_unit_code, #9=_value_code
     _where_clause = '
-    WHERE event_code = ANY($1)';
+    WHERE 1=1';
+
+    IF _event_codes IS NOT NULL THEN
+        _where_clause =  _where_clause || '
+		AND  event_code = ANY($1)';
+    END IF;
 
     IF _min_age_of_onset IS NOT NULL THEN
         _where_clause =  _where_clause || '
