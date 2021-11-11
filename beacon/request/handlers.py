@@ -1,6 +1,7 @@
 import json
 from aiohttp import web
 from aiohttp.web_request import Request
+from beacon.request.model import RequestParams
 from bson import json_util
 
 from beacon.request import get_parameters
@@ -38,12 +39,7 @@ def dummy_pg_handler(log_name, db_fn):
     async def wrapper(request):
         LOG.info('Running a request for %s', log_name)
 
-        LOG.info(str(request))
-        LOG.info(str(dir(request)))
-
-        qparams = {}
-        # qparams = get_qparams_from_request(request)  # TODO
-        # LOG.debug('requested datasets:  %s', qparams.datasetIds)
+        qparams = RequestParams(query=request.query)
 
         # TODO: Pick access_token
         # TODO: Filter out datasets
