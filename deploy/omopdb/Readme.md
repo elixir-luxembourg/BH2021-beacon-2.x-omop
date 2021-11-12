@@ -12,7 +12,7 @@ First, run [view_clinical_events.sql](view_clinical_events.sql).
 Then, run [count_individuals_by_event.sql](count_individuals_by_event.sql). No replacement necessary. 
 This creates a Pl/gSQL function.
 
-For the `api/filter_endpoints`, the script in [get_filtering_terms.sql](get_filtering_terms.sql) needs to be run.
+For the `api/filtering_terms`, the script in [get_filtering_terms.sql](get_filtering_terms.sql) needs to be run.
 - Replace `cdm_synthea10` with your OMOP CDM schema, which should also include the OMOP vocabularies tables.
 
 # Examples
@@ -35,4 +35,7 @@ To test whether the scripts executed correctly, you use the example queries give
 - Note: The function does not support multiple measures with multiple different values. The same value range is applied to all given codes.
 
 ## Function `get_filtering_terms`
-- 
+- TODO: Recreate the get_filtering_terms() function to enable discovery of all concepts used across all tables within the CDM
+- TODO: ALlow for simple customisation within the function so implementers can provide a list of tables to pull the filter terms from
+- TODO: pass connection object instead of instantiating a new connection
+- Note: the 3rd select statement within the function might not be working
