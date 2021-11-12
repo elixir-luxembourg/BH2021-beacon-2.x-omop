@@ -37,7 +37,7 @@ def build_beacon_resultset_response(data,
 
 
 def build_beacon_count_response(num_total_results,
-                                qparams: dict):
+                                request_body: dict):
     """"
     Transform data into the Beacon response format for the count granularity.
     """
@@ -47,16 +47,16 @@ def build_beacon_count_response(num_total_results,
         'apiVersion': conf.api_version,
         'returnedGranularity': conf.beacon_granularity,
         'receivedRequestSummary': {
-            "apiVersion": qparams['meta']['apiVersion'],
-            "requestedSchemas": qparams['meta']['requestedSchemas'],
-            "requestParameters": qparams['query']['requestParameters'],
-            "filters": qparams['query']['filters'],
-            "includeResultsetResponses": qparams['query']['includeResultsetResponses'],
+            "apiVersion": request_body['meta']['apiVersion'],
+            "requestedSchemas": request_body['meta']['requestedSchemas'],
+            "requestParameters": request_body['query']['requestParameters'],
+            "filters": request_body['query']['filters'],
+            "includeResultsetResponses": request_body['query']['includeResultsetResponses'],
             "pagination": {
-                "skip": qparams['query']['pagination']['skip'],
-                "limit": qparams['query']['pagination']['limit']
+                "skip": request_body['query']['pagination']['skip'],
+                "limit": request_body['query']['pagination']['limit']
             },
-            "requestedGranularity": qparams['query']['requestedGranularity']
+            "requestedGranularity": request_body['query']['requestedGranularity']
         },
         'returnedSchemas': ['TODO']  # TODO
     }

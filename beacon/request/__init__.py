@@ -14,7 +14,9 @@ LOG = logging.getLogger(__name__)
 
 async def get_parameters(request: Request) -> RequestParams:
     if request.method == "POST" and request.has_body and request.can_read_body:
-        params = RequestParams.from_json(await request.content.read(-1))
+        body = await request.json()
+        params = RequestParams(query=body['query'])
+        # params = RequestParams.from_json(await request.content.read(-1))
         LOG.debug(params)
         return params
     else:

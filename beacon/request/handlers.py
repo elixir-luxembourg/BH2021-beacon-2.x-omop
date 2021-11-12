@@ -40,13 +40,14 @@ def dummy_pg_handler(log_name, db_fn):
     async def wrapper(request):
         LOG.info('Running a request for %s', log_name)
 
-        body = await request.json()  # TODO: use get_parameters
-        qparams = RequestParams(query=body['query'])
+        qparams = await get_parameters(request)
 
         # TODO: Pick access_token
 
         num_total_results = await db_fn(qparams)
-        response_converted = build_beacon_count_response(num_total_results, body)
+
+        request_body = await request.json()
+        response_converted = build_beacon_count_response(num_total_results, request_body)
 
         LOG.info('Formatting the response for %s', log_name)
         return web.json_response(response_converted)
