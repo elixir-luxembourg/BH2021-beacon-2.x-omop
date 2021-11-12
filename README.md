@@ -31,7 +31,7 @@ from members of [NBIS](https://nbis.se/) and
 ### Future works
 
 - Increase functionality of the implementation
-  - allow for querying using any default model(s) + easy extension to include custom models
+  - allow for querying using any default model(s) + easy methods/very detailed descriptions for implementers to include custom models
   - better integration with the OMOP CDM
 - Look at alternate routes to integration such as leveraging the [OHDSI webapi](https://github.com/OHDSI/WebAPI) which is installed on top of all EHDEN OMOP CDM DB's
 - Increase functionality of the UI
