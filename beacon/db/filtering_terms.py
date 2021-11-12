@@ -2,14 +2,16 @@ from beacon.db import client
 from beacon.db.filters import apply_filters
 from beacon.db.utils import query_id
 from beacon.request.model import RequestParams
+from beacon import conf
 import asyncio
 import asyncpg
 
 
 async def get_filtering_terms():
     # TODO: pass the connection object through to here to use instead of the below
-    connection = await asyncpg.connect(user='postgres', password='password',
-                                 database='postgres', host='127.0.0.1')
+    connection = await asyncpg.connect(user=conf.database_user, password=conf.database_password,
+                                       database=conf.database_name, host=conf.database_url,
+                                       port=conf.database_port)
     filterList = []
     values = await connection.fetch(
         "select * from public.get_filtering_terms()"

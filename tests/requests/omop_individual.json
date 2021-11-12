@@ -1,0 +1,42 @@
+{
+  "$schema": "../beaconRequestBody.json",
+  "meta": {
+    "apiVersion": "2.0.0-draft.4",
+    "requestedSchemas": [
+      {
+        "entityType": "individual",
+        "schema": "ga4gh-beacon-default-individual-2.0.0-draft.4"
+      }
+    ]
+  },
+  "query": {
+    "requestParameters": {
+      "individual": {
+        "id": "",
+        "sex": "Gender:M",
+        "diseases": [
+          {
+            "id": "LOINC:2093-3"
+          }
+        ],
+        "ageOfOnset": {
+          "min": 45,
+          "max": 86
+        }
+      }
+    },
+    "filters": [
+      {
+        "id": "CDM:1147028",
+        "operators": ">=",
+        "value": "1970"
+      }
+    ],
+    "includeResultsetResponses": "ALL",
+    "pagination": {
+      "skip": 0,
+      "limit": 10
+    },
+    "requestedGranularity": "count"
+  }
+}
