@@ -38,17 +38,27 @@ def print_qparams(qparams_db, proxy, logger):
 
 def dummy_pg_handler(log_name, db_fn):
     async def wrapper(request):
-        LOG.info('Running a request for %s', log_name)
+        # hacky
+        if request.method == "POST":
+            LOG.info('Running a request for %s', log_name)
 
-        qparams = await get_parameters(request)
+            qparams = await get_parameters(request)
 
-        # TODO: Pick access_token
+            # TODO: Pick access_token
 
-        num_total_results = await db_fn(qparams)
+            num_total_results = await db_fn(qparams)
 
-        request_body = await request.json()
-        response_converted = build_beacon_count_response(num_total_results, request_body)
+            request_body = await request.json()
+            response_converted = build_beacon_count_response(num_total_results, request_body)
 
-        LOG.info('Formatting the response for %s', log_name)
-        return web.json_response(response_converted)
+            LOG.info('Formatting the response for %s', log_name)
+            return web.json_response(response_converted)
+        else:
+            qparams = RequestParams(query=request.query)
+
+            response = await db_fn(qparams)
+
+            LOG.info('Formatting the response for %s', log_name)
+            return web.json_response(response)
+
     return wrapper
